@@ -35,8 +35,12 @@ void Game::Init()
         ResourceManager::LoadTexture(texturesList[i][0].c_str(), true, texturesList[i][1].c_str());
 
     // load levels
-    GameLevel one; one.Load(this->tilesize, this->Width, this->Height);
+    GameLevel one; one.Load(this->tilesize, this->Width, this->Height, 10);
+    GameLevel two; two.Load(this->tilesize, this->Width, this->Height, 20);
+    GameLevel three; three.Load(this->tilesize, this->Width, this->Height, 30);
     this->Levels.push_back(one);
+    this->Levels.push_back(two);
+    this->Levels.push_back(three);
     this->Level = 0;    
 }
 
@@ -139,6 +143,12 @@ void Game::Update(float dt)
 {
     auto &level = this->Levels[this->Level];
     if(this->State == GAME_ACTIVE){
+
+        if(CheckCollision(level.Player, level.Exit)){
+            this->Level++;
+            if(this->Level == 3) this->State = GAME_MENU;
+        }
+
         for(auto &p : level.Pieces){
             glm::vec2 curpos = p.Position;
 

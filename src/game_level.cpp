@@ -13,11 +13,11 @@
 #include <iostream>
 
 
-void GameLevel::Load(float tilesize, unsigned int levelWidth, unsigned int levelHeight)
+void GameLevel::Load(float tilesize, unsigned int levelWidth, unsigned int levelHeight, int enemyCount)
 {
     this->Grid.clear();
     this->Pieces.clear();
-    this->init(tilesize, levelWidth, levelHeight);
+    this->init(tilesize, levelWidth, levelHeight, enemyCount);
 }
 
 void GameLevel::Draw(SpriteRenderer &renderer)
@@ -38,7 +38,7 @@ bool GameLevel::IsCompleted()
     return false;
 }
 
-void GameLevel::init(float tilesize, unsigned int levelWidth, unsigned int levelHeight)
+void GameLevel::init(float tilesize, unsigned int levelWidth, unsigned int levelHeight, int enemyCount)
 {
     float unit_width = tilesize, unit_height = tilesize; 
     // calculate dimensions
@@ -55,8 +55,11 @@ void GameLevel::init(float tilesize, unsigned int levelWidth, unsigned int level
         for (unsigned int x = 0; x < width; ++x, p^=1)
         {
             glm::vec2 pos(unit_width * x, unit_height * y);
-            glm::vec2 size(unit_width, unit_height);
-            if(x == 0 or y == 0 or x == width - 1 or y == height - 1){
+            glm::vec2 size(unit_width * 0.9, unit_height * 0.9);
+
+            int MAGIC = rand()%10;
+
+            if(x == 0 or y == 0 or x == width - 1 or y == height - 1 or MAGIC == 5){
                 GameObject obj(pos, size, ResourceManager::GetTexture("wall"));
                 obj.IsSolid = true; this->filled[y][x] = true;
                 row.push_back(obj);
@@ -75,13 +78,18 @@ void GameLevel::init(float tilesize, unsigned int levelWidth, unsigned int level
         }
         this->Grid.push_back(row);
     }
+    glm::vec2 posxx(unit_width * (width-1), unit_height * (height-2));
+    glm::vec2 sizexx(unit_width, unit_height);
+    Exit = GameObject(posxx, sizexx, ResourceManager::GetTexture("gray_light_square"));
+    Exit.IsSolid = false;
+    this->Grid[height-2][width-1] = Exit;
     // Draw person
     glm::vec2 posp(unit_width * 1, unit_height * 1);
-    glm::vec2 sizep(unit_width, unit_height);
+    glm::vec2 sizep(unit_width * 0.7 , unit_height * 0.7);
     Player = GameObject(posp, sizep, ResourceManager::GetTexture("penguin"));
 
     // Draw pieces
-    for(int i=0; i<30; i++){
+    for(int i=0; i<enemyCount; i++){
         int x = rand()%(width-1)+1;
         int y = rand()%(height-1)+1;
 
@@ -93,7 +101,7 @@ void GameLevel::init(float tilesize, unsigned int levelWidth, unsigned int level
         }
         filled[y][x] = true;
         glm::vec2 pos(unit_width * x, unit_height * y);
-        glm::vec2 size(unit_width, unit_height);
+        glm::vec2 size(unit_width * 0.8, unit_height * 0.8);
         int randtype = rand()%5;
         GameObject obj;
         int colorr = rand()%2;

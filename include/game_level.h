@@ -30,19 +30,20 @@ public:
     std::vector<std::vector<bool>> filled;
     std::vector<GameObject> Pieces;
     GameObject Player;
+    GameObject Exit;
 
     unsigned int height, width;
     // constructor
     GameLevel() { }
     // loads level from file
-    void Load(float tilesize, unsigned int levelWidth, unsigned int levelHeight);
+    void Load(float tilesize, unsigned int levelWidth, unsigned int levelHeight, int enemyCount);
     // render level
     void Draw(SpriteRenderer &renderer);
     // check if the level is completed (all non-solid tiles are destroyed)
     bool IsCompleted();
 private:
     // initialize level from tile data
-    void init(float tilesize, unsigned int levelWidth, unsigned int levelHeight);
+    void init(float tilesize, unsigned int levelWidth, unsigned int levelHeight, int enemyCount);
 };
 
 #endif

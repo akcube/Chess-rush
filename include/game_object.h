@@ -24,7 +24,7 @@
 // minimal of state as described within GameObject.
 
 enum {
-    TYPE_LITE, TYPE_ROOK, TYPE_KNIGHT, TYPE_BISHOP, TYPE_KING, TYPE_QUEEN, TYPE_PLAYER
+    TYPE_LITE, TYPE_ROOK, TYPE_KNIGHT, TYPE_BISHOP, TYPE_KING, TYPE_QUEEN, TYPE_PLAYER, TYPE_COINS
 };
 
 struct inst{
