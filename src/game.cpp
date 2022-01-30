@@ -30,7 +30,7 @@ void Game::Init()
     // load textures
     int num_textures = sizeof(texturesList)/sizeof(texturesList[0]);
     for(int i=0; i<num_textures; i++)
-        ResourceManager::LoadTexture(texturesList[i][0].c_str(), true, texturesList[i][1].c_str());        
+        ResourceManager::LoadTexture(texturesList[i][0].c_str(), true, texturesList[i][1].c_str());    
 }
 
 void Game::Update(float dt)
