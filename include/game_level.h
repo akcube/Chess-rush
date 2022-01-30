@@ -29,6 +29,8 @@ public:
     std::vector<std::vector<GameObject>> Grid;
     std::vector<std::vector<bool>> filled;
     std::vector<GameObject> Pieces;
+    GameObject Player;
+
     unsigned int height, width;
     // constructor
     GameLevel() { }

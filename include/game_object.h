@@ -16,7 +16,8 @@
 
 #include "texture.h"
 #include "sprite_renderer.h"
-
+#include <queue>
+#include <vector>
 
 // Container object for holding all state relevant for a single
 // game object entity. Each object in the game likely needs the
@@ -24,6 +25,18 @@
 
 enum {
     TYPE_LITE, TYPE_ROOK, TYPE_KNIGHT, TYPE_BISHOP, TYPE_KING, TYPE_QUEEN, TYPE_PLAYER
+};
+
+struct inst{
+    int target_x, target_y;
+    char dir; 
+    /**
+        Top right: E
+        Top left: Q
+        Bottom right: C
+        Bottom left: Z
+    **/
+    std::vector<std::pair<int, int>> path;
 };
 
 class GameObject
@@ -36,6 +49,9 @@ public:
     unsigned int Type;
     bool        IsSolid;
     bool        Destroyed;
+    int         chessColor;
+    // movement queue
+    std::queue<inst> q;
     // render state
     Texture2D   Sprite;	
     // constructor(s)

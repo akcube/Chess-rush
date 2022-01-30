@@ -34,6 +34,7 @@ public:
     unsigned int            Width, Height;
     std::vector<GameLevel>  Levels;
     unsigned int            Level;
+    unsigned int            tilesize;
     // constructor/destructor
     Game(unsigned int width, unsigned int height);
     ~Game();
@@ -63,6 +64,7 @@ const std::string texturesList[][2] = {
     { "textures/gray_dark_square.png", "gray_dark_square" },
     { "textures/gray_light_square.png", "gray_light_square" },
     { "textures/wall.png", "wall" },
+    { "textures/penguin.png", "penguin"}
 };
 
 #endif

@@ -27,6 +27,7 @@ void GameLevel::Draw(SpriteRenderer &renderer)
             if (!tile.Destroyed) tile.Draw(renderer);
     for (auto &piece : this->Pieces)
             if (!piece.Destroyed) piece.Draw(renderer);
+    Player.Draw(renderer);
 }
 
 bool GameLevel::IsCompleted()
@@ -74,8 +75,13 @@ void GameLevel::init(float tilesize, unsigned int levelWidth, unsigned int level
         }
         this->Grid.push_back(row);
     }
+    // Draw person
+    glm::vec2 posp(unit_width * 7, unit_height * 7);
+    glm::vec2 sizep(unit_width, unit_height);
+    Player = GameObject(posp, sizep, ResourceManager::GetTexture("penguin"));
+
     // Draw pieces
-    for(int i=0; i<10; i++){
+    for(int i=0; i<30; i++){
         int x = rand()%width;
         int y = rand()%height;
         if(filled[y][x]){
@@ -85,8 +91,50 @@ void GameLevel::init(float tilesize, unsigned int levelWidth, unsigned int level
         filled[y][x] = true;
         glm::vec2 pos(unit_width * x, unit_height * y);
         glm::vec2 size(unit_width, unit_height);
-        GameObject obj(pos, size, ResourceManager::GetTexture("wqueen"));
-        obj.IsSolid = true;
+        int randtype = rand()%5;
+        GameObject obj;
+        int colorr = rand()%2;
+        if(randtype == 0){
+            if(colorr)
+                obj =  GameObject(pos, size, ResourceManager::GetTexture("bqueen"));
+            else
+                obj =  GameObject(pos, size, ResourceManager::GetTexture("wqueen"));
+            obj.Type = TYPE_QUEEN;
+            obj.IsSolid = true;
+        }
+        else if(randtype == 1){
+            if(colorr)
+                obj =  GameObject(pos, size, ResourceManager::GetTexture("bking"));
+            else
+                obj =  GameObject(pos, size, ResourceManager::GetTexture("wking"));
+            obj.Type = TYPE_KING;
+            obj.IsSolid = true;
+        }
+        else if(randtype == 2){
+            if(colorr)
+                obj =  GameObject(pos, size, ResourceManager::GetTexture("brook"));
+            else
+                obj =  GameObject(pos, size, ResourceManager::GetTexture("wrook"));
+            obj.Type = TYPE_ROOK;
+            obj.IsSolid = true;
+        }
+        else if(randtype == 3){
+            if(colorr)
+                obj =  GameObject(pos, size, ResourceManager::GetTexture("bknight"));
+            else
+                obj =  GameObject(pos, size, ResourceManager::GetTexture("wknight"));
+            obj.Type = TYPE_KNIGHT;
+            obj.IsSolid = true;
+        }
+        else if(randtype == 4){
+            if(colorr)
+                obj =  GameObject(pos, size, ResourceManager::GetTexture("bbishop"));
+            else
+                obj =  GameObject(pos, size, ResourceManager::GetTexture("wbishop"));
+            obj.Type = TYPE_BISHOP;
+            obj.IsSolid = true;
+        }  
+        obj.chessColor = colorr;
         Pieces.push_back(obj);
     }
 }
