@@ -30,7 +30,11 @@ void Game::Init()
     // load textures
     int num_textures = sizeof(texturesList)/sizeof(texturesList[0]);
     for(int i=0; i<num_textures; i++)
-        ResourceManager::LoadTexture(texturesList[i][0].c_str(), true, texturesList[i][1].c_str());    
+        ResourceManager::LoadTexture(texturesList[i][0].c_str(), true, texturesList[i][1].c_str());
+    // load levels
+    GameLevel one; one.Load(50, this->Width, this->Height / 2);
+    this->Levels.push_back(one);
+    this->Level = 0;    
 }
 
 void Game::Update(float dt)
@@ -45,6 +49,13 @@ void Game::ProcessInput(float dt)
 
 void Game::Render()
 {
-        Renderer->DrawSprite(ResourceManager::GetTexture("gray_light_square"), 
-                glm::vec2(200.0f, 200.0f), glm::vec2(300.0f, 400.0f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+    if(this->State == GAME_ACTIVE)
+    {
+        // draw background
+        // Renderer->DrawSprite(ResourceManager::GetTexture("background"), 
+        //     glm::vec2(0.0f, 0.0f), glm::vec2(this->Width, this->Height), 0.0f
+        // );
+        // draw level
+        this->Levels[this->Level].Draw(*Renderer);
+    }
 }
