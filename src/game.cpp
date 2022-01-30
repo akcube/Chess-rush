@@ -138,7 +138,6 @@ bool isEnemyPiece(GameObject &x){
 void Game::Update(float dt)
 {
     auto &level = this->Levels[this->Level];
-    level.Player.Position.x++;
     if(this->State == GAME_ACTIVE){
         for(auto &p : level.Pieces){
             glm::vec2 curpos = p.Position;
@@ -203,13 +202,34 @@ void Game::Update(float dt)
                 }
             }
 
+            for(int i=0; i<level.Pieces.size(); i++){
+                if(level.Pieces[i].Destroyed or !level.Pieces[i].IsSolid) continue;
+                if(CheckCollision(level.Pieces[i], level.Player)){
+                    cout<<"Object: "<<level.Pieces[i].Position.x<<" "<<level.Pieces[i].Position.y<<endl;
+                    this->State = GAME_MENU;
+                }
+            }
+
         }
     }
 }
 
 void Game::ProcessInput(float dt)
 {
-   
+    auto &level = this->Levels[this->Level];
+    GameObject shitcode = level.Player;
+    if(Keys[GLFW_KEY_W]) shitcode.Position.y--;
+    if(Keys[GLFW_KEY_A]) shitcode.Position.x--;
+    if(Keys[GLFW_KEY_S]) shitcode.Position.y++;
+    if(Keys[GLFW_KEY_D]) shitcode.Position.x++;
+    bool valid = true;
+    for(auto &row:level.Grid)
+        for(auto &cell:row){
+            if(cell.IsSolid && CheckCollision(shitcode, cell)){
+                valid = false;
+            }
+        }
+    if(valid) level.Player.Position = shitcode.Position;
 }
 
 void Game::Render()

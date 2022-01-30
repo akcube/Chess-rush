@@ -76,15 +76,18 @@ void GameLevel::init(float tilesize, unsigned int levelWidth, unsigned int level
         this->Grid.push_back(row);
     }
     // Draw person
-    glm::vec2 posp(unit_width * 7, unit_height * 7);
+    glm::vec2 posp(unit_width * 1, unit_height * 1);
     glm::vec2 sizep(unit_width, unit_height);
     Player = GameObject(posp, sizep, ResourceManager::GetTexture("penguin"));
 
     // Draw pieces
     for(int i=0; i<30; i++){
-        int x = rand()%width;
-        int y = rand()%height;
-        if(filled[y][x]){
+        int x = rand()%(width-1)+1;
+        int y = rand()%(height-1)+1;
+
+        int maxdist = abs(x-1) + abs(y-1);
+
+        if(filled[y][x] or maxdist<8){
             i--;
             continue;
         }
