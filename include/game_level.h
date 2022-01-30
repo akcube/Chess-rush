@@ -27,7 +27,9 @@ class GameLevel
 public:
     // level state
     std::vector<std::vector<GameObject>> Grid;
+    std::vector<std::vector<bool>> filled;
     std::vector<GameObject> Pieces;
+    unsigned int height, width;
     // constructor
     GameLevel() { }
     // loads level from file

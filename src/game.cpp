@@ -31,8 +31,9 @@ void Game::Init()
     int num_textures = sizeof(texturesList)/sizeof(texturesList[0]);
     for(int i=0; i<num_textures; i++)
         ResourceManager::LoadTexture(texturesList[i][0].c_str(), true, texturesList[i][1].c_str());
+
     // load levels
-    GameLevel one; one.Load(50, this->Width, this->Height / 2);
+    GameLevel one; one.Load(50, this->Width, this->Height);
     this->Levels.push_back(one);
     this->Level = 0;    
 }
@@ -51,11 +52,6 @@ void Game::Render()
 {
     if(this->State == GAME_ACTIVE)
     {
-        // draw background
-        // Renderer->DrawSprite(ResourceManager::GetTexture("background"), 
-        //     glm::vec2(0.0f, 0.0f), glm::vec2(this->Width, this->Height), 0.0f
-        // );
-        // draw level
         this->Levels[this->Level].Draw(*Renderer);
     }
 }

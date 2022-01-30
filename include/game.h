@@ -62,6 +62,7 @@ const std::string texturesList[][2] = {
     { "textures/brown_light_square.png", "brown_light_square" },
     { "textures/gray_dark_square.png", "gray_dark_square" },
     { "textures/gray_light_square.png", "gray_light_square" },
+    { "textures/wall.png", "wall" },
 };
 
 #endif

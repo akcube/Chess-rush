@@ -41,18 +41,26 @@ void GameLevel::init(float tilesize, unsigned int levelWidth, unsigned int level
 {
     float unit_width = tilesize, unit_height = tilesize; 
     // calculate dimensions
-    unsigned int height = 2 * levelHeight/static_cast<float>(unit_height);
+    unsigned int height = levelHeight/static_cast<float>(unit_height);
     unsigned int width = levelWidth/static_cast<float>(unit_width); // note we can index vector at [0] since this function is only called if height > 0
-    height++, width++;
+    this->height = height;
+    this->width = width;
     int p = 0;
-    // initialize level tiles based on tileData
-    for (unsigned int y = 0; y < height; ++y)
+    this->filled.assign(height, std::vector<bool>(width, false));
+    // Draw checkerboard background
+    for (unsigned int y = 0; y < height; ++y, p^=1)
     {
         std::vector<GameObject> row;
         for (unsigned int x = 0; x < width; ++x, p^=1)
         {
             glm::vec2 pos(unit_width * x, unit_height * y);
             glm::vec2 size(unit_width, unit_height);
+            if(x == 0 or y == 0 or x == width - 1 or y == height - 1){
+                GameObject obj(pos, size, ResourceManager::GetTexture("wall"));
+                obj.IsSolid = true; this->filled[y][x] = true;
+                row.push_back(obj);
+                continue;
+            }
             if(p){
                 GameObject obj(pos, size, ResourceManager::GetTexture("gray_dark_square"));
                 obj.IsSolid = false;
@@ -65,6 +73,21 @@ void GameLevel::init(float tilesize, unsigned int levelWidth, unsigned int level
             }
         }
         this->Grid.push_back(row);
+    }
+    // Draw pieces
+    for(int i=0; i<10; i++){
+        int x = rand()%width;
+        int y = rand()%height;
+        if(filled[y][x]){
+            i--;
+            continue;
+        }
+        filled[y][x] = true;
+        glm::vec2 pos(unit_width * x, unit_height * y);
+        glm::vec2 size(unit_width, unit_height);
+        GameObject obj(pos, size, ResourceManager::GetTexture("wqueen"));
+        obj.IsSolid = true;
+        Pieces.push_back(obj);
     }
 }
 
