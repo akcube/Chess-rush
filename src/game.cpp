@@ -1,11 +1,14 @@
 #include "game.h"
 #include "resource_manager.h"
 #include "sprite_renderer.h"
+#include <bits/stdc++.h>
+#include "text_renderer.h"
 
 #include <iostream>
 
 // Game-related State data
 SpriteRenderer  *Renderer;
+TextRenderer  *Text;
 
 Game::Game(unsigned int width, unsigned int height) 
     : State(GAME_ACTIVE), Keys(), Width(width), Height(height), tilesize(50)
@@ -42,6 +45,9 @@ void Game::Init()
     this->Levels.push_back(two);
     this->Levels.push_back(three);
     this->Level = 0;    
+
+    Text = new TextRenderer(this->Width, this->Height);
+    Text->Load("fonts/ocraext.TTF", 24);
 }
 
 glm::vec2 nxtPos(glm::vec2 curpos, char dir){
@@ -146,7 +152,7 @@ void Game::Update(float dt)
 
         if(CheckCollision(level.Player, level.Exit)){
             this->Level++;
-            if(this->Level == 3) this->State = GAME_MENU;
+            if(this->Level == 3) this->State = GAME_WIN;
         }
 
         for(auto &p : level.Pieces){
@@ -260,5 +266,13 @@ void Game::Render()
     if(this->State == GAME_ACTIVE)
     {
         this->Levels[this->Level].Draw(*Renderer);
+    }
+    else if(this->State == GAME_MENU){
+        Text->RenderText("Game over. You lost.", 5.0f, 5.0f, 1.0f);
+    }
+    else if(this->State == GAME_WIN){
+        int score = 0;
+        for(auto &l:this->Levels) score += l.score;
+        Text->RenderText("Game over. You win. Total score: " + to_string(score), 5.0f, 5.0f, 1.0f);
     }
 }
