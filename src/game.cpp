@@ -212,11 +212,24 @@ void Game::Update(float dt)
                 }
             }
 
+            // Player Enemy
             for(int i=0; i<level.Pieces.size(); i++){
                 if(level.Pieces[i].Destroyed or !level.Pieces[i].IsSolid) continue;
+                if(!isEnemyPiece(level.Pieces[i])) continue;
                 if(CheckCollision(level.Pieces[i], level.Player)){
                     cout<<"Object: "<<level.Pieces[i].Position.x<<" "<<level.Pieces[i].Position.y<<endl;
                     this->State = GAME_MENU;
+                }
+            }
+
+            // Player coin
+            for(int i=0; i<level.Pieces.size(); i++){
+                if(level.Pieces[i].Destroyed) continue;
+                if(isEnemyPiece(level.Pieces[i])) continue;
+                if(CheckCollision(level.Pieces[i], level.Player)){
+                    level.Pieces[i].Destroyed = true;
+                    level.score += 30;
+                    cout<<level.score<<endl;
                 }
             }
 

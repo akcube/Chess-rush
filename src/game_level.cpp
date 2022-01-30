@@ -40,6 +40,8 @@ bool GameLevel::IsCompleted()
 
 void GameLevel::init(float tilesize, unsigned int levelWidth, unsigned int levelHeight, int enemyCount)
 {
+    score = 0;
+    wonGame = false;
     float unit_width = tilesize, unit_height = tilesize; 
     // calculate dimensions
     unsigned int height = levelHeight/static_cast<float>(unit_height);
@@ -87,6 +89,23 @@ void GameLevel::init(float tilesize, unsigned int levelWidth, unsigned int level
     glm::vec2 posp(unit_width * 1, unit_height * 1);
     glm::vec2 sizep(unit_width * 0.7 , unit_height * 0.7);
     Player = GameObject(posp, sizep, ResourceManager::GetTexture("penguin"));
+
+    int gemCt = rand()%7 + 10;
+
+    for(int i=0; i<gemCt; i++){
+        int x = rand()%(width-1)+1;
+        int y = rand()%(height-1)+1;
+        glm::vec2 pos(unit_width * x, unit_height * y);
+        glm::vec2 size(unit_width * 0.9, unit_height * 0.9);
+        if(filled[y][x]){
+            i--;
+            continue;
+        }
+        GameObject obj = GameObject(pos, size, ResourceManager::GetTexture("gem"));
+        obj.Type = TYPE_COINS;
+        obj.IsSolid = false;
+        Pieces.push_back(obj);
+    }
 
     // Draw pieces
     for(int i=0; i<enemyCount; i++){

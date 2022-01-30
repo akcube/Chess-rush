@@ -32,6 +32,8 @@ public:
     GameObject Player;
     GameObject Exit;
 
+    int score;
+    bool wonGame;
     unsigned int height, width;
     // constructor
     GameLevel() { }
